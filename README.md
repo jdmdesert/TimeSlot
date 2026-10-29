@@ -30,6 +30,10 @@ The repository includes an `amplify.yml` build specification. Amplify uses
 Nitro's AWS adapter to create the SSR-compatible `.amplify-hosting` bundle,
 while the default build continues to target Cloudflare/Sites.
 
+TimeSlot intentionally does not declare the native `next` package. Vinext
+provides the compatible `next/*` API surface, and omitting native Next prevents
+Amplify from selecting its incompatible built-in Next.js deployment pipeline.
+
 To verify the Amplify bundle locally:
 
 ```bash
