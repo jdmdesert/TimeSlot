@@ -10,6 +10,9 @@ const { d1, r2 } = hostingConfig;
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
+const isAwsAmplify =
+  Boolean(process.env.AWS_APP_ID || process.env.AWS_BRANCH) ||
+  process.env.NITRO_PRESET === "aws_amplify";
 
 const localBindingConfig = {
   main: "./worker/index.ts",
@@ -34,6 +37,17 @@ const localBindingConfig = {
 };
 
 export default defineConfig(async () => {
+  // Amplify needs Nitro to translate Vinext's server output into AWS's
+  // .amplify-hosting deployment bundle. Keep this path isolated so the
+  // existing Cloudflare/Sites build remains unchanged.
+  if (isAwsAmplify) {
+    const { nitro } = await import("nitro/vite");
+
+    return {
+      plugins: [vinext(), nitro()],
+    };
+  }
+
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= "false";

@@ -24,4 +24,16 @@ npm run dev
 npm run build
 ```
 
+## AWS Amplify
+
+The repository includes an `amplify.yml` build specification. Amplify uses
+Nitro's AWS adapter to create the SSR-compatible `.amplify-hosting` bundle,
+while the default build continues to target Cloudflare/Sites.
+
+To verify the Amplify bundle locally:
+
+```bash
+npm run build:amplify
+```
+
 The current app uses realistic demo data as a front-end template. Authentication, persistent booking data, payments, notifications, and production calendar syncing are intended for the next implementation phase.
