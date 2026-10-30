@@ -14,13 +14,13 @@ type Pro = {
   price: string;
   color: string;
   initials: string;
+  photo?: string;
   tags: string[];
 };
 
 const professionals: Pro[] = [
-  { id: 1, name: "Maya Torres", specialty: "Natural hair specialist", studio: "The Texture Room", rating: "4.9", reviews: 184, distance: "1.2 mi", next: "Today, 2:30 PM", price: "$65", color: "coral", initials: "MT", tags: ["Silk press", "Protective styles"] },
-  { id: 2, name: "Andre Lewis", specialty: "Master barber", studio: "North & Main Barber Co.", rating: "5.0", reviews: 236, distance: "2.4 mi", next: "Today, 4:00 PM", price: "$42", color: "blue", initials: "AL", tags: ["Fades", "Beard care"] },
-  { id: 3, name: "Sofia Ramirez", specialty: "Colorist & stylist", studio: "Luma Hair Studio", rating: "4.8", reviews: 119, distance: "3.1 mi", next: "Tomorrow, 9:30 AM", price: "$75", color: "gold", initials: "SR", tags: ["Balayage", "Haircuts"] },
+  { id: 1, name: "Omar Chavez", specialty: "Master barber", studio: "Chavez Grooming Studio", rating: "4.9", reviews: 184, distance: "1.2 mi", next: "Today, 2:30 PM", price: "$45", color: "coral", initials: "OC", photo: "/omar-chavez.jpg", tags: ["Fades", "Beard care"] },
+  { id: 2, name: "Rafa Chavez", specialty: "Barber & stylist", studio: "Chavez Grooming Studio", rating: "5.0", reviews: 236, distance: "2.4 mi", next: "Today, 4:00 PM", price: "$50", color: "blue", initials: "RC", photo: "/rafa-chavez.jpg", tags: ["Haircuts", "Styling"] },
 ];
 
 const services = [
@@ -110,7 +110,7 @@ export default function Home() {
             {!confirmed ? (
               <>
                 <div className="modal-heading">
-                  <span className={`avatar ${selectedPro.color}`}>{selectedPro.initials}</span>
+                  <span className={`avatar ${selectedPro.color}`}>{selectedPro.photo ? <img src={selectedPro.photo} alt="" /> : selectedPro.initials}</span>
                   <div><p className="eyebrow">Book with</p><h2>{selectedPro.name}</h2><p>{selectedPro.studio}</p></div>
                 </div>
                 <div className="steps" aria-label="Booking progress">
@@ -148,8 +148,8 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
   const [category, setCategory] = useState("All");
   return <div className="client-view">
     <section className="hero">
-      <div className="hero-copy"><p className="eyebrow light">YOUR TIME, YOUR STYLE</p><h1>Book your next look.<br /><em>Skip the back-and-forth.</em></h1><p>Find trusted barbers, stylists, and beauty professionals near you—then book in seconds.</p></div>
-      <div className="hero-art"><span className="art-orbit one" /><span className="art-orbit two" /><div className="floating-card"><span className="avatar blue">AL</span><div><b>Next opening</b><small>Today · 4:00 PM</small></div><span className="check">✓</span></div></div>
+      <div className="hero-copy"><p className="eyebrow light">YOUR TIME, YOUR STYLE</p><h1>Book your next look.<br /><em>Skip the back and forth.</em></h1><p>Find trusted barbers, stylists, and beauty professionals near you—then book in seconds.</p></div>
+      <div className="hero-art"><span className="art-orbit one" /><span className="art-orbit two" /><div className="floating-card"><span className="avatar blue"><img src="/rafa-chavez.jpg" alt="Rafa Chavez" /></span><div><b>Next opening</b><small>Today · 4:00 PM</small></div><span className="check">✓</span></div></div>
     </section>
 
     <section className="content-wrap">
@@ -160,11 +160,11 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
 
       <div className="section-heading"><div><p className="eyebrow">AVAILABLE SOON</p><h2>Top professionals near you</h2></div><div className="filter-pills"><button className="active">Recommended</button><button>Top rated</button><button>Nearest</button></div></div>
       <div className="pro-grid">{professionals.map(pro => <article className="pro-card" key={pro.id}>
-        <div className={`pro-cover ${pro.color}`}><span className="pro-monogram">{pro.initials}</span><button aria-label={`Save ${pro.name}`} onClick={() => onToast(`${pro.name} added to favorites`)}>♡</button><span className="available-badge">Available today</span></div>
+        <div className={`pro-cover ${pro.color} ${pro.photo ? "has-photo" : ""}`}>{pro.photo ? <img className="pro-photo" src={pro.photo} alt={`${pro.name}, ${pro.specialty}`} /> : <span className="pro-monogram">{pro.initials}</span>}<button aria-label={`Save ${pro.name}`} onClick={() => onToast(`${pro.name} added to favorites`)}>♡</button><span className="available-badge">Available today</span></div>
         <div className="pro-body"><div className="rating">★ {pro.rating} <span>({pro.reviews})</span></div><h3>{pro.name}</h3><p>{pro.specialty} · {pro.studio}</p><div className="tag-row">{pro.tags.map(tag => <span key={tag}>{tag}</span>)}</div><div className="pro-meta"><span>⌖ {pro.distance}</span><span>From <b>{pro.price}</b></span></div><div className="next-slot"><span><small>Next available</small><b>{pro.next}</b></span><button onClick={() => onBook(pro)}>Book</button></div></div>
       </article>)}</div>
 
-      <section className="rebook-banner"><div className="rebook-icon">↻</div><div><p className="eyebrow">WELCOME BACK</p><h2>Loved your last appointment?</h2><p>Rebook with Maya at the same time next Thursday.</p></div><button className="secondary-button" onClick={() => onBook(professionals[0])}>Rebook in one tap</button></section>
+      <section className="rebook-banner"><div className="rebook-icon">↻</div><div><p className="eyebrow">WELCOME BACK</p><h2>Loved your last appointment?</h2><p>Rebook with Omar at the same time next Thursday.</p></div><button className="secondary-button" onClick={() => onBook(professionals[0])}>Rebook in one tap</button></section>
     </section>
     <footer><div className="brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div><p>Appointments that fit your life.</p><span>© 2026 TimeSlot</span></footer>
   </div>;
