@@ -186,7 +186,7 @@ function OnboardingFlow({ step, onStep, onComplete, onBook }: { step: number; on
     <div className="onboarding-card">
       <div className="onboarding-top">
         <div className="onboarding-brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div>
-        {step > 0 && step < 5 && <button className="onboarding-skip" onClick={() => step === 4 ? onStep(5) : onStep(step + 1)}>Skip</button>}
+        {step > 0 && <button className="onboarding-skip" onClick={() => step === 5 ? onComplete() : step === 4 ? onStep(5) : onStep(step + 1)}>Skip</button>}
       </div>
 
       {step === 0 && <div className="onboarding-screen welcome-screen">
@@ -240,7 +240,7 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
   const [showSearch, setShowSearch] = useState(false);
   return <div className="client-view">
     <section className="hero">
-      <div className="hero-copy"><p className="eyebrow light">YOUR TIME, YOUR STYLE</p><h1>Book your next look.<br /><em>Skip the back and forth.</em></h1><p>Find trusted barbers, stylists, and beauty professionals near you—then book in seconds.</p></div>
+      <div className="hero-copy"><p className="eyebrow light">YOUR TIME, YOUR STYLE</p><h1>Book your next look.<br /><em>Skip the back and forth.</em></h1><p className="hero-description">Find trusted barbers, stylists, and beauty professionals near you—then book in seconds.</p><form className="hero-search" onSubmit={(event) => { event.preventDefault(); setShowSearch(true); }}><span>⌕</span><input aria-label="Search services or professionals" placeholder="Search services or professionals" /><button type="submit">Search</button></form></div>
       <div className="hero-art"><span className="art-orbit one" /><span className="art-orbit two" /><div className="floating-card"><span className="avatar blue"><img src="/rafa-chavez.jpg" alt="Rafa Chavez" /></span><div><b>Next opening</b><small>Today · 4:00 PM</small></div><span className="check">✓</span></div></div>
     </section>
 
