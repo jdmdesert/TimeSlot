@@ -37,6 +37,18 @@ const appointments = [
   { time: "4:00", period: "PM", client: "Open slot", service: "Available to book", length: "60 min", tone: "open" },
 ];
 
+function TimeSlotLogo({ compact = false }: { compact?: boolean }) {
+  return <span className={compact ? "timeslot-logo compact" : "timeslot-logo"} aria-hidden="true">
+    <svg viewBox="0 0 48 48" role="img">
+      <defs><linearGradient id="timeslot-gradient" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#35d6ff" /><stop offset=".52" stopColor="#5b7cff" /><stop offset="1" stopColor="#d447ff" /></linearGradient></defs>
+      <path d="M10 8v6M25 8v6M7 17h24M8 11h22a3 3 0 0 1 3 3v17a3 3 0 0 1-3 3H11a4 4 0 0 1-4-4V14a3 3 0 0 1 3-3Z" fill="none" stroke="url(#timeslot-gradient)" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M13 23h3M22 23h3M13 29h3" stroke="url(#timeslot-gradient)" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="34" cy="33" r="9" fill="#0b1023" stroke="url(#timeslot-gradient)" strokeWidth="3.5" />
+      <path d="M34 28v5l4 2" fill="none" stroke="url(#timeslot-gradient)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </span>;
+}
+
 export default function Home() {
   const [mode, setMode] = useState<"client" | "business">("client");
   const [selectedPro, setSelectedPro] = useState<Pro | null>(null);
@@ -70,8 +82,8 @@ export default function Home() {
     <main className="app-shell">
       <header className="topbar">
         <button className="brand" onClick={() => setMode("client")} aria-label="TimeSlot home">
-          <span className="brand-mark">T</span>
-          <span>TimeSlot</span>
+          <TimeSlotLogo />
+          <span className="brand-word"><span>Time</span><b>Slot</b></span>
         </button>
 
         <nav className="mode-switch" aria-label="Preview mode">
@@ -137,19 +149,14 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
   return <div className="client-view">
     <section className="hero">
       <div className="hero-copy"><p className="eyebrow light">YOUR TIME, YOUR STYLE</p><h1>Book your next look.<br /><em>Skip the back-and-forth.</em></h1><p>Find trusted barbers, stylists, and beauty professionals near you—then book in seconds.</p></div>
-      <div className="search-card">
-        <label><span>⌕</span><input aria-label="Search service" placeholder="Service or professional" defaultValue="Haircut" /></label>
-        <label><span>⌖</span><input aria-label="Search location" placeholder="City or ZIP" defaultValue="Phoenix, AZ" /></label>
-        <button className="search-button" onClick={() => onToast("Showing available professionals near Phoenix")}>Search</button>
-      </div>
       <div className="hero-art"><span className="art-orbit one" /><span className="art-orbit two" /><div className="floating-card"><span className="avatar blue">AL</span><div><b>Next opening</b><small>Today · 4:00 PM</small></div><span className="check">✓</span></div></div>
     </section>
 
     <section className="content-wrap">
       <div className="quick-row"><div><p className="eyebrow">EXPLORE</p><h2>What are you looking for?</h2></div><button className="link-button">View all services →</button></div>
       <div className="category-row">{[
-        ["All", "✦"], ["Barber", "⌁"], ["Hair", "✂"], ["Nails", "◉"], ["Brows & lashes", "⌒"], ["Skin", "◇"]
-      ].map(([label, icon]) => <button key={label} className={category === label ? "category active" : "category"} onClick={() => setCategory(label)}><span>{icon}</span>{label}</button>)}</div>
+        ["All", "✦", "all"], ["Barber", "✂", "barber"], ["Hair", "⌁", "hair"], ["Nails", "◉", "nails"], ["Brows & lashes", "⌒", "brows"], ["Skin", "◇", "skin"]
+      ].map(([label, icon, tone]) => <button key={label} className={`${category === label ? "category active" : "category"} ${tone}`} onClick={() => setCategory(label)}><span>{icon}</span>{label}<i>→</i></button>)}</div>
 
       <div className="section-heading"><div><p className="eyebrow">AVAILABLE SOON</p><h2>Top professionals near you</h2></div><div className="filter-pills"><button className="active">Recommended</button><button>Top rated</button><button>Nearest</button></div></div>
       <div className="pro-grid">{professionals.map(pro => <article className="pro-card" key={pro.id}>
@@ -159,7 +166,7 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
 
       <section className="rebook-banner"><div className="rebook-icon">↻</div><div><p className="eyebrow">WELCOME BACK</p><h2>Loved your last appointment?</h2><p>Rebook with Maya at the same time next Thursday.</p></div><button className="secondary-button" onClick={() => onBook(professionals[0])}>Rebook in one tap</button></section>
     </section>
-    <footer><div className="brand"><span className="brand-mark">T</span><span>TimeSlot</span></div><p>Appointments that fit your life.</p><span>© 2026 TimeSlot</span></footer>
+    <footer><div className="brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div><p>Appointments that fit your life.</p><span>© 2026 TimeSlot</span></footer>
   </div>;
 }
 
