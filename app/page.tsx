@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Pro = {
   id: number;
@@ -37,6 +37,11 @@ const appointments = [
   { time: "4:00", period: "PM", client: "Open slot", service: "Available to book", length: "60 min", tone: "open" },
 ];
 
+const interestOptions = [
+  ["Barbering", "✂"], ["Hair styling", "⌁"], ["Nails", "◉"], ["Skin care", "◇"],
+  ["Brows & lashes", "◠"], ["Massage", "◎"], ["Makeup", "✦"], ["Wellness & spa", "♨"],
+];
+
 function TimeSlotLogo({ compact = false }: { compact?: boolean }) {
   return <span className={compact ? "timeslot-logo compact" : "timeslot-logo"} aria-hidden="true">
     <svg viewBox="0 0 48 48" role="img">
@@ -50,6 +55,7 @@ function TimeSlotLogo({ compact = false }: { compact?: boolean }) {
 }
 
 export default function Home() {
+  const [onboardingStep, setOnboardingStep] = useState<number | null>(null);
   const [mode, setMode] = useState<"client" | "business">("client");
   const [selectedPro, setSelectedPro] = useState<Pro | null>(null);
   const [bookingStep, setBookingStep] = useState(0);
@@ -60,6 +66,16 @@ export default function Home() {
   const [businessTab, setBusinessTab] = useState("Calendar");
 
   const bookingTotal = useMemo(() => services[selectedService].price, [selectedService]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setOnboardingStep(window.localStorage.getItem("timeslot-onboarding") === "complete" ? -1 : 0), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  function completeOnboarding() {
+    window.localStorage.setItem("timeslot-onboarding", "complete");
+    setOnboardingStep(-1);
+  }
 
   function startBooking(pro: Pro) {
     setSelectedPro(pro);
@@ -80,6 +96,9 @@ export default function Home() {
 
   return (
     <main className="app-shell">
+      {onboardingStep !== null && onboardingStep >= 0 && (
+        <OnboardingFlow step={onboardingStep} onStep={setOnboardingStep} onComplete={completeOnboarding} onBook={startBooking} />
+      )}
       <header className="topbar">
         <button className="brand" onClick={() => setMode("client")} aria-label="Time Slot home">
           <TimeSlotLogo />
@@ -144,8 +163,81 @@ export default function Home() {
   );
 }
 
+function OnboardingFlow({ step, onStep, onComplete, onBook }: { step: number; onStep: (step: number) => void; onComplete: () => void; onBook: (pro: Pro) => void }) {
+  const [audience, setAudience] = useState("For me");
+  const [interests, setInterests] = useState<string[]>([]);
+
+  function toggleInterest(label: string) {
+    setInterests(current => current.includes(label) ? current.filter(item => item !== label) : current.length < 5 ? [...current, label] : current);
+  }
+
+  function requestLocation() {
+    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(() => onStep(2), () => onStep(2), { timeout: 6000 });
+    else onStep(2);
+  }
+
+  async function requestNotifications() {
+    if ("Notification" in window && Notification.permission === "default") await Notification.requestPermission();
+    onStep(3);
+  }
+
+  return <section className="onboarding-shell" aria-label="Time Slot setup">
+    <div className="onboarding-glow one" /><div className="onboarding-glow two" />
+    <div className="onboarding-card">
+      <div className="onboarding-top">
+        <div className="onboarding-brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div>
+        {step > 0 && step < 5 && <button className="onboarding-skip" onClick={() => step === 4 ? onStep(5) : onStep(step + 1)}>Skip</button>}
+      </div>
+
+      {step === 0 && <div className="onboarding-screen welcome-screen">
+        <div className="onboarding-visual logo-visual"><span className="orbit-ring a" /><span className="orbit-ring b" /><TimeSlotLogo /></div>
+        <div className="onboarding-copy"><p className="onboarding-kicker">YOUR TIME, YOUR STYLE</p><h1>Welcome to Time Slot</h1><p>Find trusted professionals, compare services, and book your next appointment in seconds.</p></div>
+        <button className="onboarding-primary" onClick={() => onStep(1)}>Get started</button>
+      </div>}
+
+      {step === 1 && <div className="onboarding-screen">
+        <Progress active={1} />
+        <div className="onboarding-visual map-visual"><span className="map-grid" /><span className="route-line" /><span className="map-pin">●</span><span className="map-pin small">●</span></div>
+        <div className="onboarding-copy"><p className="onboarding-kicker">STEP 1 OF 3</p><h1>Find your perfect fit</h1><p>Use your location to discover trusted professionals and available appointments nearby.</p></div>
+        <div className="onboarding-actions"><button className="onboarding-primary" onClick={requestLocation}>Use my location</button><button className="onboarding-secondary" onClick={() => onStep(2)}>Enter location manually</button></div>
+      </div>}
+
+      {step === 2 && <div className="onboarding-screen">
+        <Progress active={2} />
+        <div className="onboarding-visual reminder-visual"><span className="mini-calendar">29</span><span className="reminder-bell">●</span></div>
+        <div className="onboarding-copy"><p className="onboarding-kicker">STEP 2 OF 3</p><h1>Stay on schedule</h1><p>Get helpful reminders, booking updates, and last-minute availability.</p></div>
+        <div className="onboarding-actions"><button className="onboarding-primary" onClick={requestNotifications}>Turn on reminders</button><button className="onboarding-secondary" onClick={() => onStep(3)}>Maybe later</button></div>
+      </div>}
+
+      {step === 3 && <div className="onboarding-screen audience-screen">
+        <Progress active={3} />
+        <div className="onboarding-copy align-left"><p className="onboarding-kicker">STEP 3 OF 3</p><h1>Make Time Slot yours</h1><p>Choose who you’re booking for so we can surface the most relevant services.</p></div>
+        <div className="audience-options">{[["For me","♙"],["For someone else","♙♙"],["Both","♙+"]].map(([label, icon]) => <button key={label} className={audience === label ? "selected" : ""} onClick={() => setAudience(label)}><span>{icon}</span><strong>{label}</strong><i>{audience === label ? "✓" : ""}</i></button>)}</div>
+        <button className="onboarding-primary" onClick={() => onStep(4)}>Continue</button>
+      </div>}
+
+      {step === 4 && <div className="onboarding-screen interests-screen">
+        <div className="onboarding-copy"><h1>What are you interested in?</h1><p>Choose up to 5 categories. You can update these anytime.</p></div>
+        <div className="interest-grid">{interestOptions.map(([label, icon]) => <button key={label} className={interests.includes(label) ? "selected" : ""} onClick={() => toggleInterest(label)}><span>{icon}</span><strong>{label}</strong>{interests.includes(label) && <i>✓</i>}</button>)}</div>
+        <button className="onboarding-primary" disabled={!interests.length} onClick={() => onStep(5)}>{interests.length ? "Continue" : "Choose a category"}</button>
+      </div>}
+
+      {step === 5 && <div className="onboarding-screen recommendations-screen">
+        <div className="onboarding-copy align-left"><p className="onboarding-kicker">MADE FOR YOU</p><h1>Professionals you’ll love</h1><p>Based on your preferences and location.</p></div>
+        <div className="recommendation-list">{professionals.map(pro => <article key={pro.id} className="recommendation-card"><img src={pro.photo} alt={pro.name} /><div><span className="recommendation-rating">★ {pro.rating} ({pro.reviews.toLocaleString()})</span><h2>{pro.name}</h2><p>{pro.specialty}</p><small>Next available · {pro.next}</small></div><div className="recommendation-price"><small>From</small><b>{pro.price}</b><button onClick={() => { onComplete(); onBook(pro); }}>Book</button></div></article>)}</div>
+        <button className="onboarding-primary" onClick={onComplete}>Start exploring</button>
+      </div>}
+    </div>
+  </section>;
+}
+
+function Progress({ active }: { active: number }) {
+  return <div className="onboarding-progress" aria-label={`Step ${active} of 3`}>{[1,2,3].map(item => <span key={item} className={item <= active ? "active" : ""} />)}</div>;
+}
+
 function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: (message: string) => void }) {
   const [category, setCategory] = useState("All");
+  const [showSearch, setShowSearch] = useState(false);
   return <div className="client-view">
     <section className="hero">
       <div className="hero-copy"><p className="eyebrow light">YOUR TIME, YOUR STYLE</p><h1>Book your next look.<br /><em>Skip the back and forth.</em></h1><p>Find trusted barbers, stylists, and beauty professionals near you—then book in seconds.</p></div>
@@ -153,7 +245,8 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
     </section>
 
     <section className="content-wrap">
-      <div className="quick-row"><div><p className="eyebrow">EXPLORE</p><h2>What are you looking for?</h2></div><button className="link-button">View all services →</button></div>
+      {showSearch && <section className="discovery-search"><button className="search-close" onClick={() => setShowSearch(false)} aria-label="Close search">×</button><p className="eyebrow">EXPLORE</p><h2>What are you looking for?</h2><label><span>⌕</span><input placeholder="Service or professional" aria-label="Service or professional" /></label><label><span>⌖</span><input value="Near me" readOnly aria-label="Location" /></label><p className="popular-label">Popular services</p><div>{["Haircut","Haircut & beard","Skin fade","Line up","Beard shaping","Hair styling","Nails"].map(item => <button key={item}>{item}</button>)}</div><button className="onboarding-primary" onClick={() => { setShowSearch(false); onToast("Showing available professionals near you"); }}>Search</button></section>}
+      <div className="quick-row"><div><p className="eyebrow">EXPLORE</p><h2>What are you looking for?</h2></div><button className="link-button" onClick={() => setShowSearch(true)}>View all services →</button></div>
       <div className="category-row">{[
         ["All", "✦", "all"], ["Barber", "✂", "barber"], ["Hair", "⌁", "hair"], ["Nails", "◉", "nails"], ["Brows & lashes", "⌒", "brows"], ["Skin", "◇", "skin"]
       ].map(([label, icon, tone]) => <button key={label} className={`${category === label ? "category active" : "category"} ${tone}`} onClick={() => setCategory(label)}><span>{icon}</span>{label}<i>→</i></button>)}</div>
@@ -166,6 +259,7 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
 
       <section className="rebook-banner"><div className="rebook-icon">↻</div><div><p className="eyebrow">WELCOME BACK</p><h2>Loved your last appointment?</h2><p>Rebook with Omar at the same time next Thursday.</p></div><button className="secondary-button" onClick={() => onBook(professionals[0])}>Rebook in one tap</button></section>
     </section>
+    <nav className="client-bottom-nav" aria-label="Customer navigation"><button className="active">⌕<span>Explore</span></button><button>□<span>Bookings</span></button><button>♡<span>Favorites</span></button><button>♙<span>Profile</span></button></nav>
     <footer><div className="brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div><p>Appointments that fit your life.</p><span>© 2026 Time Slot</span></footer>
   </div>;
 }
