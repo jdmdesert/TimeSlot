@@ -19,8 +19,8 @@ type Pro = {
 };
 
 const professionals: Pro[] = [
-  { id: 1, name: "Omar Chavez", specialty: "Master barber", studio: "Chavez Grooming Studio", rating: "4.9", reviews: 184, distance: "1.2 mi", next: "Today, 2:30 PM", price: "$45", color: "coral", initials: "OC", photo: "/omar-chavez.jpg", tags: ["Fades", "Beard care"] },
-  { id: 2, name: "Rafa Chavez", specialty: "Barber & stylist", studio: "Chavez Grooming Studio", rating: "5.0", reviews: 236, distance: "2.4 mi", next: "Today, 4:00 PM", price: "$50", color: "blue", initials: "RC", photo: "/rafa-chavez.jpg", tags: ["Haircuts", "Styling"] },
+  { id: 1, name: "Omar Chavez", specialty: "Master barber", studio: "Chavez Grooming Studio", rating: "5.0", reviews: 1200, distance: "1.2 mi", next: "Today, 2:30 PM", price: "$50", color: "coral", initials: "OC", photo: "/omar-chavez.jpg", tags: ["Fades", "Beard care"] },
+  { id: 2, name: "Rafa Chavez", specialty: "Barber & stylist", studio: "Chavez Grooming Studio", rating: "4.9", reviews: 863, distance: "2.4 mi", next: "Today, 4:00 PM", price: "$50", color: "blue", initials: "RC", photo: "/rafa-chavez.jpg", tags: ["Haircuts", "Styling"] },
 ];
 
 const services = [
@@ -81,7 +81,7 @@ export default function Home() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <button className="brand" onClick={() => setMode("client")} aria-label="TimeSlot home">
+        <button className="brand" onClick={() => setMode("client")} aria-label="Time Slot home">
           <TimeSlotLogo />
           <span className="brand-word"><span>Time</span><b>Slot</b></span>
         </button>
@@ -166,14 +166,14 @@ function ClientView({ onBook, onToast }: { onBook: (pro: Pro) => void; onToast: 
 
       <section className="rebook-banner"><div className="rebook-icon">↻</div><div><p className="eyebrow">WELCOME BACK</p><h2>Loved your last appointment?</h2><p>Rebook with Omar at the same time next Thursday.</p></div><button className="secondary-button" onClick={() => onBook(professionals[0])}>Rebook in one tap</button></section>
     </section>
-    <footer><div className="brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div><p>Appointments that fit your life.</p><span>© 2026 TimeSlot</span></footer>
+    <footer><div className="brand"><TimeSlotLogo compact /><span className="brand-word"><span>Time</span><b>Slot</b></span></div><p>Appointments that fit your life.</p><span>© 2026 Time Slot</span></footer>
   </div>;
 }
 
 function BusinessView({ tab, onTab, onToast }: { tab: string; onTab: (tab: string) => void; onToast: (message: string) => void }) {
   const tabs = ["Overview", "Calendar", "Clients", "Services", "Team"];
   return <div className="business-view">
-    <aside className="sidebar"><div className="business-profile"><span className="avatar coral">MT</span><div><strong>The Texture Room</strong><small>Phoenix, Arizona</small></div></div><nav>{tabs.map(item => <button key={item} className={tab === item ? "active" : ""} onClick={() => onTab(item)}><span>{({Overview:"▦",Calendar:"□",Clients:"♙",Services:"✦",Team:"♧"} as Record<string,string>)[item]}</span>{item}</button>)}</nav><div className="sidebar-bottom"><button><span>⚙</span>Settings</button><div className="trial-card"><b>TimeSlot Pro</b><p>Your booking page is live.</p><span>View public profile →</span></div></div></aside>
+    <aside className="sidebar"><div className="business-profile"><span className="avatar coral">MT</span><div><strong>The Texture Room</strong><small>Phoenix, Arizona</small></div></div><nav>{tabs.map(item => <button key={item} className={tab === item ? "active" : ""} onClick={() => onTab(item)}><span>{({Overview:"▦",Calendar:"□",Clients:"♙",Services:"✦",Team:"♧"} as Record<string,string>)[item]}</span>{item}</button>)}</nav><div className="sidebar-bottom"><button><span>⚙</span>Settings</button><div className="trial-card"><b>Time Slot Pro</b><p>Your booking page is live.</p><span>View public profile →</span></div></div></aside>
     <section className="dashboard">
       <div className="dashboard-top"><div><p className="eyebrow">THURSDAY, OCTOBER 29</p><h1>{tab === "Calendar" ? "Today’s schedule" : tab}</h1><p>Good morning, Maya. Here’s what’s happening today.</p></div><div><button className="secondary-button" onClick={() => onToast("Public booking link copied")}>⌁ Share booking link</button><button className="primary-button" onClick={() => onToast("New appointment form opened")}>＋ New appointment</button></div></div>
       <div className="stat-grid"><div><span className="stat-icon mint">□</span><p>Today’s bookings</p><strong>6</strong><small>2 spots available</small></div><div><span className="stat-icon peach">$</span><p>Expected revenue</p><strong>$485</strong><small className="positive">↑ 12% vs last Thu</small></div><div><span className="stat-icon violet">♙</span><p>New clients</p><strong>2</strong><small>8 total this week</small></div><div><span className="stat-icon gold">★</span><p>Profile rating</p><strong>4.9</strong><small>184 client reviews</small></div></div>

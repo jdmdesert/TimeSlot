@@ -9,15 +9,20 @@ export async function generateMetadata(): Promise<Metadata> {
   const imageUrl = `${protocol}://${host}/og.png`;
 
   return {
-    title: "TimeSlot — Book your next look",
+    title: "Time Slot — Book your next look",
     description: "A modern appointment booking platform for barbers, stylists, and beauty professionals.",
+    manifest: "/manifest.webmanifest",
+    icons: {
+      icon: [{ url: "/favicon.svg", type: "image/svg+xml" }, { url: "/desktop-icon-192.png", sizes: "192x192", type: "image/png" }],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    },
     openGraph: {
-      title: "TimeSlot — Book your next look",
+      title: "Time Slot — Book your next look",
       description: "Appointments that fit your life.",
       type: "website",
-      images: [{ url: imageUrl, width: 1734, height: 906, alt: "TimeSlot — Book your next look." }],
+      images: [{ url: imageUrl, width: 1734, height: 906, alt: "Time Slot — Book your next look." }],
     },
-    twitter: { card: "summary_large_image", title: "TimeSlot — Book your next look", description: "Appointments that fit your life.", images: [imageUrl] },
+    twitter: { card: "summary_large_image", title: "Time Slot — Book your next look", description: "Appointments that fit your life.", images: [imageUrl] },
   };
 }
 

@@ -1,0 +1,19 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(760 205) rotate(132) scale(850)">
+      <stop stop-color="#252063"/><stop offset=".46" stop-color="#10162B"/><stop offset="1" stop-color="#070A17"/>
+    </radialGradient>
+    <linearGradient id="aurora" x1="205" y1="175" x2="833" y2="858" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#35D6FF"/><stop offset=".48" stop-color="#5B7CFF"/><stop offset="1" stop-color="#D447FF"/>
+    </linearGradient>
+    <filter id="shadow" x="85" y="65" width="860" height="890" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#glow)"/>
+  <path opacity=".24" filter="url(#shadow)" d="M288 206V317M582 206V317M225 381H660M240 270H644C679 270 707 298 707 333V638C707 673 679 701 644 701H303C259 701 225 667 225 623V333C225 298 253 270 288 270Z" stroke="#5B7CFF" stroke-width="72" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M288 206V317M582 206V317M225 381H660M240 270H644C679 270 707 298 707 333V638C707 673 679 701 644 701H303C259 701 225 667 225 623V333C225 298 253 270 288 270Z" stroke="url(#aurora)" stroke-width="62" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M350 486H397M514 486H561M350 594H397" stroke="url(#aurora)" stroke-width="62" stroke-linecap="round"/>
+  <circle cx="700" cy="683" r="174" fill="#0B1023" stroke="url(#aurora)" stroke-width="62"/>
+  <path d="M700 591V682L777 731" stroke="url(#aurora)" stroke-width="54" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -83,7 +83,7 @@ body { background:#080b1a; }
 .timeslot-logo.compact { width:35px; height:35px; }
 .timeslot-logo svg { width:100%; height:100%; overflow:visible; filter:drop-shadow(0 0 11px #5b7cff38); }
 .brand-word { display:inline-flex; align-items:baseline; letter-spacing:-.8px; }
-.brand-word b { font-weight:800; background:var(--aurora); background-clip:text; -webkit-background-clip:text; color:transparent; }
+.brand-word b { margin-left:.24em; font-weight:800; background:var(--aurora); background-clip:text; -webkit-background-clip:text; color:transparent; }
 .mode-switch { background:#0f1730; border:1px solid #28365e; }
 .mode-switch button { color:#8996bd; }
 .mode-switch button.active { color:#fff; background:linear-gradient(115deg,#086ebf,#5530c8); box-shadow:0 5px 22px #426bff3b,inset 0 0 0 1px #53cfff55; }
