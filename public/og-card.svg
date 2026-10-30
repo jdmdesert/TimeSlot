@@ -1,0 +1,23 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1080 70) rotate(143) scale(1030 770)">
+      <stop stop-color="#29206A"/><stop offset=".43" stop-color="#10162B"/><stop offset="1" stop-color="#060914"/>
+    </radialGradient>
+    <linearGradient id="aurora" x1="94" y1="83" x2="1000" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#35D6FF"/><stop offset=".48" stop-color="#5B7CFF"/><stop offset="1" stop-color="#D447FF"/>
+    </linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="55"/></filter>
+  </defs>
+  <rect width="1200" height="630" rx="0" fill="url(#bg)"/>
+  <circle cx="1080" cy="110" r="245" fill="#6D3CFF" opacity=".17" filter="url(#blur)"/>
+  <circle cx="70" cy="610" r="260" fill="#1BCBFF" opacity=".12" filter="url(#blur)"/>
+  <path d="M171 159V210M307 159V210M143 244H344M149 187H337C354 187 368 201 368 218V366C368 383 354 397 337 397H176C158 397 143 382 143 364V218C143 201 157 187 174 187Z" stroke="url(#aurora)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M207 295H229M275 295H297M207 344H229" stroke="url(#aurora)" stroke-width="30" stroke-linecap="round"/>
+  <circle cx="360" cy="385" r="81" fill="#0A0F21" stroke="url(#aurora)" stroke-width="30"/>
+  <path d="M360 343V385L397 407" stroke="url(#aurora)" stroke-width="25" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="510" y="285" fill="#F9FAFF" font-family="Inter, Arial, sans-serif" font-size="100" font-weight="760" letter-spacing="-4">Time</text>
+  <text x="770" y="285" fill="url(#aurora)" font-family="Inter, Arial, sans-serif" font-size="100" font-weight="800" letter-spacing="-4">Slot</text>
+  <text x="515" y="362" fill="#B7C1DE" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="500">Book your next look.</text>
+  <rect x="514" y="410" width="386" height="4" rx="2" fill="url(#aurora)" opacity=".85"/>
+  <text x="515" y="469" fill="#7E8DB8" font-family="Inter, Arial, sans-serif" font-size="25" font-weight="600" letter-spacing="4">YOUR TIME, YOUR STYLE</text>
+</svg>
